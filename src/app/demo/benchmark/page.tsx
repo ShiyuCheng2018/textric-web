@@ -2,27 +2,39 @@
 
 import { useState } from 'react'
 import { DemoShell } from '@/components/demo-shell'
-import { runBenchmark } from './actions'
+import { useTextric } from '@/hooks/use-textric'
 import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 
-type BenchResult = Awaited<ReturnType<typeof runBenchmark>>
-
 export default function BenchmarkPage() {
+  const m = useTextric()
   const [text, setText] = useState('The quick brown fox jumps over the lazy dog.')
   const [size, setSize] = useState(16)
   const [maxWidth, setMaxWidth] = useState(300)
   const [running, setRunning] = useState(false)
-  const [results, setResults] = useState<BenchResult | null>(null)
+  const [results, setResults] = useState<Array<{ count: number; durationMs: number; opsPerSec: number }> | null>(null)
 
   const run = async () => {
+    if (!m) return
     setRunning(true)
-    const r = await runBenchmark({
-      counts: [100, 1000, 5000, 10000, 20000],
-      text, size, maxWidth,
-    })
-    setResults(r)
+    // Use setTimeout(0) to let UI update to "Running..." state
+    await new Promise(r => setTimeout(r, 0))
+    const counts = [100, 1000, 5000, 10000, 20000]
+    const newResults: Array<{ count: number; durationMs: number; opsPerSec: number }> = []
+    for (const count of counts) {
+      const start = performance.now()
+      for (let i = 0; i < count; i++) {
+        m.measure(text, { font: 'Inter', size, maxWidth })
+      }
+      const durationMs = performance.now() - start
+      newResults.push({
+        count,
+        durationMs: Math.round(durationMs * 100) / 100,
+        opsPerSec: Math.round(count / (durationMs / 1000)),
+      })
+    }
+    setResults(newResults)
     setRunning(false)
   }
 
@@ -31,7 +43,7 @@ export default function BenchmarkPage() {
   return (
     <DemoShell
       title="Performance Benchmark"
-      description="Measure text layout performance at scale. All computation runs server-side via Textric."
+      description="Measure text layout performance at scale. All computation runs client-side via Textric."
       controls={
         <>
           <div className="space-y-2">
@@ -90,7 +102,7 @@ export default function BenchmarkPage() {
                 ))}
               </div>
               <div className="text-xs text-muted-foreground">
-                All measurements run server-side. Each operation = measure() with multi-line wrapping.
+                All measurements run client-side. Each operation = measure() with multi-line wrapping.
               </div>
             </>
           ) : (

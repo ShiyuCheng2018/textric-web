@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
-import { layoutRichSVG } from './actions'
+import { useTextric } from '@/hooks/use-textric'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
@@ -14,8 +14,6 @@ import {
   SelectItem,
 } from '@/components/ui/select'
 
-type SVGResult = Awaited<ReturnType<typeof layoutRichSVG>>
-
 const defaultSpans = [
   { text: 'Dashboard ', size: 28, weight: 700 },
   { text: '/ ', size: 28, weight: 400 },
@@ -24,19 +22,25 @@ const defaultSpans = [
 ]
 
 export default function SVGTypographyPage() {
+  const m = useTextric()
   const [spans, setSpans] = useState(defaultSpans)
   const [maxWidth, setMaxWidth] = useState(500)
   const [lineHeight, setLineHeight] = useState(1.4)
   const [showBaselines, setShowBaselines] = useState(true)
   const [showBoundingBoxes, setShowBoundingBoxes] = useState(true)
-  const [result, setResult] = useState<SVGResult | null>(null)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      layoutRichSVG({ spans, maxWidth, lineHeight, showBaselines }).then(setResult)
-    }, 150)
-    return () => clearTimeout(timer)
-  }, [spans, maxWidth, lineHeight, showBaselines])
+  const result = useMemo(() => {
+    if (!m) return null
+    const richSpans = spans.map(s => ({ text: s.text, font: 'Inter', size: s.size, weight: s.weight }))
+    const r = m.measureRichText(richSpans, { maxWidth, lineHeight })
+    return {
+      width: r.width, height: r.height, lineCount: r.lineCount,
+      lines: r.lines.map(line => ({
+        y: line.y, baseline: line.baseline, ascent: line.ascent, descent: line.descent, height: line.height, width: line.width,
+        fragments: line.fragments.map(f => ({ text: f.text, x: f.x, width: f.width, size: f.size, weight: f.weight })),
+      })),
+    }
+  }, [m, spans, maxWidth, lineHeight])
 
   const updateSpan = (i: number, field: string, value: string | number) => {
     setSpans(prev => prev.map((s, j) => j === i ? { ...s, [field]: value } : s))

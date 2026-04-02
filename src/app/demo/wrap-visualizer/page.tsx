@@ -1,12 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
-import { visualizeWrap } from './actions'
-
-type WrapResult = Awaited<ReturnType<typeof visualizeWrap>>
+import { useTextric } from '@/hooks/use-textric'
 
 export default function WrapVisualizerPage() {
   const [text, setText] = useState('The quick brown fox jumps over the lazy dog. 你好世界，这是一个中英文混排的测试。')
@@ -14,14 +12,20 @@ export default function WrapVisualizerPage() {
   const [weight, setWeight] = useState(400)
   const [maxWidth, setMaxWidth] = useState(350)
   const [lineHeight, setLineHeight] = useState(1.4)
-  const [result, setResult] = useState<WrapResult | null>(null)
+  const m = useTextric()
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      visualizeWrap({ text, size, weight, maxWidth, lineHeight }).then(setResult)
-    }, 150)
-    return () => clearTimeout(timer)
-  }, [text, size, weight, maxWidth, lineHeight])
+  const result = useMemo(() => {
+    if (!m) return null
+    const r = m.measure(text, { font: 'Inter', size, weight, maxWidth, lineHeight })
+    const lineDetails = r.lines.map((line, i) => {
+      const lineMeasure = m.measure(line, { font: 'Inter', size, weight })
+      return { text: line, width: r.lineWidths[i]!, fullWidth: lineMeasure.width, chars: [...line] }
+    })
+    return {
+      lines: lineDetails, lineCount: r.lineCount, totalLineCount: r.totalLineCount,
+      truncated: r.truncated, height: r.height, maxLineWidth: r.width,
+    }
+  }, [m, text, size, weight, maxWidth, lineHeight])
 
   return (
     <DemoShell

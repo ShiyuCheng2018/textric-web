@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { measureText } from './actions'
+import { useTextric } from '@/hooks/use-textric'
 
-type MeasureResult = Awaited<ReturnType<typeof measureText>>
+type MeasureResult =
+  | { mode: 'multi'; width: number; height: number; lines: string[]; lineWidths: number[]; lineCount: number; truncated: boolean }
+  | { mode: 'single'; width: number; height: number; ascent: number; descent: number }
 
 export default function PlaygroundPage() {
   const [text, setText] = useState('Hello World, this is Textric!')
@@ -16,14 +18,17 @@ export default function PlaygroundPage() {
   const [weight, setWeight] = useState(400)
   const [maxWidth, setMaxWidth] = useState<number | null>(300)
   const [lineHeight, setLineHeight] = useState(1.2)
-  const [result, setResult] = useState<MeasureResult | null>(null)
+  const m = useTextric()
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      measureText({ text, size, weight, maxWidth, lineHeight }).then(setResult)
-    }, 100)
-    return () => clearTimeout(timer)
-  }, [text, size, weight, maxWidth, lineHeight])
+  const result = useMemo<MeasureResult | null>(() => {
+    if (!m) return null
+    if (maxWidth) {
+      const r = m.measure(text, { font: 'Inter', size, weight, maxWidth, lineHeight })
+      return { mode: 'multi' as const, width: r.width, height: r.height, lines: r.lines, lineWidths: r.lineWidths, lineCount: r.lineCount, truncated: r.truncated }
+    }
+    const r = m.measure(text, { font: 'Inter', size, weight, lineHeight })
+    return { mode: 'single' as const, width: r.width, height: r.height, ascent: r.ascent, descent: r.descent }
+  }, [m, text, size, weight, maxWidth, lineHeight])
 
   return (
     <DemoShell

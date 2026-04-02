@@ -1,14 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
-import { layoutOGImage } from './actions'
-
-type OGResult = Awaited<ReturnType<typeof layoutOGImage>>
+import { useTextric } from '@/hooks/use-textric'
 
 export default function OGImagePage() {
+  const m = useTextric()
   const [title, setTitle] = useState('Textric: Text Layout for AI')
   const [subtitle, setSubtitle] = useState('Line wrapping, rich text, and precise metrics — pure JS, no browser.')
   const [titleSize, setTitleSize] = useState(48)
@@ -16,15 +15,21 @@ export default function OGImagePage() {
   const [width] = useState(1200)
   const [height] = useState(630)
   const [padding, setPadding] = useState(60)
-  const [result, setResult] = useState<OGResult | null>(null)
   const [autoFit, setAutoFit] = useState(false)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      layoutOGImage({ title, subtitle, titleSize, subtitleSize, width, height, padding }).then(setResult)
-    }, 150)
-    return () => clearTimeout(timer)
-  }, [title, subtitle, titleSize, subtitleSize, width, height, padding])
+  const result = useMemo(() => {
+    if (!m) return null
+    const contentWidth = width - padding * 2
+    const titleResult = m.measure(title, { font: 'Inter', size: titleSize, weight: 700, maxWidth: contentWidth, lineHeight: 1.2 })
+    const subtitleResult = m.measure(subtitle, { font: 'Inter', size: subtitleSize, weight: 400, maxWidth: contentWidth, lineHeight: 1.4 })
+    const titleFit = m.fitText(title, { font: 'Inter', maxWidth: contentWidth, maxHeight: height * 0.5, weight: 700, lineHeight: 1.2 })
+    return {
+      title: { lines: titleResult.lines, width: titleResult.width, height: titleResult.height, lineCount: titleResult.lineCount },
+      subtitle: { lines: subtitleResult.lines, width: subtitleResult.width, height: subtitleResult.height },
+      fitTitle: { size: titleFit.size, lines: titleFit.lines, height: titleFit.height },
+      canvas: { width, height, padding },
+    }
+  }, [m, title, subtitle, titleSize, subtitleSize, width, height, padding])
 
   const scale = 0.5
 

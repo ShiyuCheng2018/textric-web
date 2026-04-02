@@ -1,15 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
-import { measurePriceTag } from './actions'
-
-type PriceResult = Awaited<ReturnType<typeof measurePriceTag>>
+import { useTextric } from '@/hooks/use-textric'
 
 export default function PriceTagPage() {
+  const m = useTextric()
   const [currency, setCurrency] = useState('$')
   const [price, setPrice] = useState('49')
   const [decimals, setDecimals] = useState('.99')
@@ -17,14 +16,31 @@ export default function PriceTagPage() {
   const [mainSize, setMainSize] = useState(48)
   const [smallSize, setSmallSize] = useState(18)
   const [containerWidth, setContainerWidth] = useState(400)
-  const [result, setResult] = useState<PriceResult | null>(null)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      measurePriceTag({ currency, price, decimals, suffix, mainSize, smallSize, containerWidth }).then(setResult)
-    }, 100)
-    return () => clearTimeout(timer)
-  }, [currency, price, decimals, suffix, mainSize, smallSize, containerWidth])
+  const result = useMemo(() => {
+    if (!m) return null
+    const spans = [
+      { text: currency, font: 'Inter', size: smallSize, weight: 400 },
+      { text: price, font: 'Inter', size: mainSize, weight: 700 },
+      { text: decimals, font: 'Inter', size: smallSize, weight: 400 },
+    ]
+    if (suffix) {
+      spans.push({ text: suffix, font: 'Inter', size: smallSize, weight: 400 })
+    }
+    const r = m.measureRichText(spans, { maxWidth: containerWidth })
+    return {
+      width: r.width,
+      height: r.height,
+      lines: r.lines.map(line => ({
+        y: line.y,
+        baseline: line.baseline,
+        height: line.height,
+        fragments: line.fragments.map(f => ({
+          text: f.text, x: f.x, width: f.width, size: f.size, weight: f.weight,
+        })),
+      })),
+    }
+  }, [m, currency, price, decimals, suffix, mainSize, smallSize, containerWidth])
 
   return (
     <DemoShell

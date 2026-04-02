@@ -1,13 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
-import { preflightEmail } from './actions'
-
-type PreflightResult = Awaited<ReturnType<typeof preflightEmail>>
+import { useTextric } from '@/hooks/use-textric'
 
 const defaultItems = [
   { label: 'Subject Line', text: 'Your Pro subscription has been renewed successfully', maxWidth: 400, size: 16, weight: 700 },
@@ -17,15 +15,22 @@ const defaultItems = [
 ]
 
 export default function EmailPreflightPage() {
+  const m = useTextric()
   const [items, setItems] = useState(defaultItems)
-  const [results, setResults] = useState<PreflightResult | null>(null)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      preflightEmail(items).then(setResults)
-    }, 150)
-    return () => clearTimeout(timer)
-  }, [items])
+  const results = useMemo(() => {
+    if (!m) return null
+    return items.map(item => {
+      const result = m.measure(item.text, { font: 'Inter', size: item.size, weight: item.weight, maxWidth: item.maxWidth, lineHeight: 1.4 })
+      const singleLine = m.measure(item.text, { font: 'Inter', size: item.size, weight: item.weight })
+      return {
+        label: item.label, text: item.text, maxWidth: item.maxWidth,
+        measuredWidth: singleLine.width, fits: singleLine.width <= item.maxWidth,
+        lineCount: result.lineCount, totalLineCount: result.totalLineCount,
+        truncated: result.truncated, lines: result.lines, height: result.height,
+      }
+    })
+  }, [m, items])
 
   const updateItem = (i: number, field: string, value: string | number) => {
     setItems(prev => prev.map((item, j) => j === i ? { ...item, [field]: value } : item))
