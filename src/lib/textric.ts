@@ -4,14 +4,16 @@ import { join } from 'path'
 
 let measurerPromise: ReturnType<typeof createMeasurer> | null = null
 
-export async function getMeasurer() {
+export function getMeasurer() {
   if (!measurerPromise) {
-    measurerPromise = createMeasurer({
-      fonts: [
-        { family: 'Inter', data: await readFile(join(process.cwd(), 'public/fonts/Inter-Regular.ttf')), weight: 400 },
-        { family: 'Inter', data: await readFile(join(process.cwd(), 'public/fonts/Inter-Bold.ttf')), weight: 700 },
-      ],
-    })
+    measurerPromise = (async () => {
+      return createMeasurer({
+        fonts: [
+          { family: 'Inter', data: await readFile(join(process.cwd(), 'public/fonts/Inter-Regular.ttf')), weight: 400 },
+          { family: 'Inter', data: await readFile(join(process.cwd(), 'public/fonts/Inter-Bold.ttf')), weight: 700 },
+        ],
+      })
+    })()
   }
   return measurerPromise
 }
