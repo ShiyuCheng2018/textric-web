@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils'
 
 const demos = [
   {
-    href: '/demo/og-image',
-    title: 'OG Image Generator',
-    description: 'Preview social card layout with fitText auto-scaling.',
+    href: '/demo/chat-bubble',
+    title: 'Chat Bubble',
+    description: 'Precisely sized chat bubbles rendered on Canvas. Export as PNG.',
     tag: 'Showcase',
   },
   {
