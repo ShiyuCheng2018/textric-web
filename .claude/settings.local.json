@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/shiyucheng/MyProjects/textric-demo/public/fonts)",
+      "Bash(cp /Users/shiyucheng/MyProjects/Textric/test/fixtures/fonts/Inter-Regular.ttf /Users/shiyucheng/MyProjects/textric-demo/public/fonts/)",
+      "Bash(cp /Users/shiyucheng/MyProjects/Textric/test/fixtures/fonts/Inter-Bold.ttf /Users/shiyucheng/MyProjects/textric-demo/public/fonts/)",
+      "Bash(pnpm build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(npx tsc:*)",
+      "Bash(node:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)"
+    ]
+  }
+}
