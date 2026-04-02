@@ -21,8 +21,8 @@ export default function EmailPreflightPage() {
   const results = useMemo(() => {
     if (!m) return null
     return items.map(item => {
-      const result = m.measure(item.text, { font: 'Inter', size: item.size, weight: item.weight, maxWidth: item.maxWidth, lineHeight: 1.4 })
-      const singleLine = m.measure(item.text, { font: 'Inter', size: item.size, weight: item.weight })
+      const result = m.measure(item.text, { font: 'Noto Sans SC', size: item.size, weight: item.weight, maxWidth: item.maxWidth, lineHeight: 1.4 })
+      const singleLine = m.measure(item.text, { font: 'Noto Sans SC', size: item.size, weight: item.weight })
       return {
         label: item.label, text: item.text, maxWidth: item.maxWidth,
         measuredWidth: singleLine.width, fits: singleLine.width <= item.maxWidth,
@@ -78,7 +78,7 @@ export default function EmailPreflightPage() {
               </div>
               <div className="relative bg-card border border-border rounded-lg overflow-hidden" style={{ width: r.maxWidth }}>
                 <div className="p-3"
-                  style={{ fontSize: items[i]!.size, fontWeight: items[i]!.weight, fontFamily: 'Inter' }}>
+                  style={{ fontSize: items[i]!.size, fontWeight: items[i]!.weight, fontFamily: 'Noto Sans SC' }}>
                   {r.lines.join(' ')}
                   {r.truncated && <span className="text-xs text-red-400">...</span>}
                 </div>

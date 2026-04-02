@@ -20,12 +20,12 @@ export default function PriceTagPage() {
   const result = useMemo(() => {
     if (!m) return null
     const spans = [
-      { text: currency, font: 'Inter', size: smallSize, weight: 400 },
-      { text: price, font: 'Inter', size: mainSize, weight: 700 },
-      { text: decimals, font: 'Inter', size: smallSize, weight: 400 },
+      { text: currency, font: 'Noto Sans SC', size: smallSize, weight: 400 },
+      { text: price, font: 'Noto Sans SC', size: mainSize, weight: 700 },
+      { text: decimals, font: 'Noto Sans SC', size: smallSize, weight: 400 },
     ]
     if (suffix) {
-      spans.push({ text: suffix, font: 'Inter', size: smallSize, weight: 400 })
+      spans.push({ text: suffix, font: 'Noto Sans SC', size: smallSize, weight: 400 })
     }
     const r = m.measureRichText(spans, { maxWidth: containerWidth })
     return {
@@ -92,7 +92,7 @@ export default function PriceTagPage() {
                         y={line.baseline}
                         fontSize={frag.size}
                         fontWeight={frag.weight}
-                        fontFamily="Inter"
+                        fontFamily="Noto Sans SC"
                         fill="currentColor"
                       >
                         {frag.text}

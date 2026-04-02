@@ -16,9 +16,9 @@ export default function WrapVisualizerPage() {
 
   const result = useMemo(() => {
     if (!m) return null
-    const r = m.measure(text, { font: 'Inter', size, weight, maxWidth, lineHeight })
+    const r = m.measure(text, { font: 'Noto Sans SC', size, weight, maxWidth, lineHeight })
     const lineDetails = r.lines.map((line, i) => {
-      const lineMeasure = m.measure(line, { font: 'Inter', size, weight })
+      const lineMeasure = m.measure(line, { font: 'Noto Sans SC', size, weight })
       return { text: line, width: r.lineWidths[i]!, fullWidth: lineMeasure.width, chars: [...line] }
     })
     return {
@@ -102,7 +102,7 @@ export default function WrapVisualizerPage() {
                           />
                           <div
                             className="absolute inset-0 flex items-center px-2 truncate"
-                            style={{ fontSize: Math.min(size, 16), fontWeight: weight, fontFamily: 'Inter' }}
+                            style={{ fontSize: Math.min(size, 16), fontWeight: weight, fontFamily: 'Noto Sans SC' }}
                           >
                             {line.text || <span className="text-muted-foreground italic">empty</span>}
                           </div>

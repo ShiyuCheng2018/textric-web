@@ -11,6 +11,7 @@ export function getMeasurer() {
         fonts: [
           { family: 'Inter', data: await readFile(join(process.cwd(), 'public/fonts/Inter-Regular.ttf')), weight: 400 },
           { family: 'Inter', data: await readFile(join(process.cwd(), 'public/fonts/Inter-Bold.ttf')), weight: 700 },
+          { family: 'Noto Sans SC', data: await readFile(join(process.cwd(), 'public/fonts/NotoSansSC-Subset.ttf')), weight: 400 },
         ],
       })
     })()

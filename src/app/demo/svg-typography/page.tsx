@@ -31,7 +31,7 @@ export default function SVGTypographyPage() {
 
   const result = useMemo(() => {
     if (!m) return null
-    const richSpans = spans.map(s => ({ text: s.text, font: 'Inter', size: s.size, weight: s.weight }))
+    const richSpans = spans.map(s => ({ text: s.text, font: 'Noto Sans SC', size: s.size, weight: s.weight }))
     const r = m.measureRichText(richSpans, { maxWidth, lineHeight })
     return {
       width: r.width, height: r.height, lineCount: r.lineCount,
@@ -155,7 +155,7 @@ export default function SVGTypographyPage() {
                     {/* Fragments */}
                     {line.fragments.map((frag, fi) => (
                       <text key={fi} x={frag.x} y={line.baseline}
-                        fontSize={frag.size} fontWeight={frag.weight} fontFamily="Inter" fill="currentColor">
+                        fontSize={frag.size} fontWeight={frag.weight} fontFamily="Noto Sans SC" fill="currentColor">
                         {frag.text}
                       </text>
                     ))}

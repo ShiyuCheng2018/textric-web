@@ -20,9 +20,9 @@ export default function OGImagePage() {
   const result = useMemo(() => {
     if (!m) return null
     const contentWidth = width - padding * 2
-    const titleResult = m.measure(title, { font: 'Inter', size: titleSize, weight: 700, maxWidth: contentWidth, lineHeight: 1.2 })
-    const subtitleResult = m.measure(subtitle, { font: 'Inter', size: subtitleSize, weight: 400, maxWidth: contentWidth, lineHeight: 1.4 })
-    const titleFit = m.fitText(title, { font: 'Inter', maxWidth: contentWidth, maxHeight: height * 0.5, weight: 700, lineHeight: 1.2 })
+    const titleResult = m.measure(title, { font: 'Noto Sans SC', size: titleSize, weight: 700, maxWidth: contentWidth, lineHeight: 1.2 })
+    const subtitleResult = m.measure(subtitle, { font: 'Noto Sans SC', size: subtitleSize, weight: 400, maxWidth: contentWidth, lineHeight: 1.4 })
+    const titleFit = m.fitText(title, { font: 'Noto Sans SC', maxWidth: contentWidth, maxHeight: height * 0.5, weight: 700, lineHeight: 1.2 })
     return {
       title: { lines: titleResult.lines, width: titleResult.width, height: titleResult.height, lineCount: titleResult.lineCount },
       subtitle: { lines: subtitleResult.lines, width: subtitleResult.width, height: subtitleResult.height },
@@ -114,7 +114,7 @@ export default function OGImagePage() {
                 <text key={`t-${i}`}
                   x={padding} y={padding + (i + 1) * (autoFit ? result.fitTitle.size : titleSize) * 1.2 - (autoFit ? result.fitTitle.size : titleSize) * 0.2}
                   fontSize={autoFit ? result.fitTitle.size : titleSize}
-                  fontWeight={700} fontFamily="Inter" fill="white">
+                  fontWeight={700} fontFamily="Noto Sans SC" fill="white">
                   {line}
                 </text>
               ))}
@@ -125,13 +125,13 @@ export default function OGImagePage() {
                   <text key={`s-${i}`}
                     x={padding} y={padding + titleH + 20 + (i + 1) * subtitleSize * 1.4 - subtitleSize * 0.2}
                     fontSize={subtitleSize}
-                    fontWeight={400} fontFamily="Inter" fill="#9CA3AF">
+                    fontWeight={400} fontFamily="Noto Sans SC" fill="#9CA3AF">
                     {line}
                   </text>
                 )
               })}
               {/* Branding */}
-              <text x={padding} y={height - padding} fontSize={18} fontFamily="Inter" fill="#6B7280">
+              <text x={padding} y={height - padding} fontSize={18} fontFamily="Noto Sans SC" fill="#6B7280">
                 textric.dev
               </text>
             </svg>

@@ -23,10 +23,10 @@ export default function PlaygroundPage() {
   const result = useMemo<MeasureResult | null>(() => {
     if (!m) return null
     if (maxWidth) {
-      const r = m.measure(text, { font: 'Inter', size, weight, maxWidth, lineHeight })
+      const r = m.measure(text, { font: 'Noto Sans SC', size, weight, maxWidth, lineHeight })
       return { mode: 'multi' as const, width: r.width, height: r.height, lines: r.lines, lineWidths: r.lineWidths, lineCount: r.lineCount, truncated: r.truncated }
     }
-    const r = m.measure(text, { font: 'Inter', size, weight, lineHeight })
+    const r = m.measure(text, { font: 'Noto Sans SC', size, weight, lineHeight })
     return { mode: 'single' as const, width: r.width, height: r.height, ascent: r.ascent, descent: r.descent }
   }, [m, text, size, weight, maxWidth, lineHeight])
 
@@ -172,7 +172,7 @@ export default function PlaygroundPage() {
                       y={(i + 1) * size * lineHeight - size * 0.2}
                       fontSize={size}
                       fontWeight={weight}
-                      fontFamily="Inter"
+                      fontFamily="Noto Sans SC"
                       fill="currentColor"
                     >
                       {line}
@@ -184,7 +184,7 @@ export default function PlaygroundPage() {
                       y={result.ascent}
                       fontSize={size}
                       fontWeight={weight}
-                      fontFamily="Inter"
+                      fontFamily="Noto Sans SC"
                       fill="currentColor"
                     >
                       {text}

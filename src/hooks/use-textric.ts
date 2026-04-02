@@ -13,14 +13,16 @@ async function loadMeasurer(): Promise<Measurer> {
   if (loadingPromise) return loadingPromise
 
   loadingPromise = (async () => {
-    const [regular, bold] = await Promise.all([
+    const [regular, bold, notoSC] = await Promise.all([
       fetch('/fonts/Inter-Regular.ttf').then(r => r.arrayBuffer()),
       fetch('/fonts/Inter-Bold.ttf').then(r => r.arrayBuffer()),
+      fetch('/fonts/NotoSansSC-Subset.ttf').then(r => r.arrayBuffer()),
     ])
     const m = await createMeasurer({
       fonts: [
         { family: 'Inter', data: new Uint8Array(regular), weight: 400 },
         { family: 'Inter', data: new Uint8Array(bold), weight: 700 },
+        { family: 'Noto Sans SC', data: new Uint8Array(notoSC), weight: 400 },
       ],
     })
     cachedMeasurer = m

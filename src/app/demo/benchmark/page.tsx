@@ -25,7 +25,7 @@ export default function BenchmarkPage() {
     for (const count of counts) {
       const start = performance.now()
       for (let i = 0; i < count; i++) {
-        m.measure(text, { font: 'Inter', size, maxWidth })
+        m.measure(text, { font: 'Noto Sans SC', size, maxWidth })
       }
       const durationMs = performance.now() - start
       newResults.push({
