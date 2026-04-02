@@ -3,6 +3,16 @@
 import { useState, useEffect } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { layoutRichSVG } from './actions'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select'
 
 type SVGResult = Awaited<ReturnType<typeof layoutRichSVG>>
 
@@ -39,43 +49,80 @@ export default function SVGTypographyPage() {
       controls={
         <>
           {spans.map((span, i) => (
-            <div key={i} className="border border-zinc-200 dark:border-zinc-800 rounded p-2 space-y-2">
-              <div className="text-xs text-zinc-400">Span {i + 1}</div>
-              <input value={span.text} onChange={e => updateSpan(i, 'text', e.target.value)}
-                className="block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-1 text-sm" />
+            <div key={i} className="bg-card border border-border rounded-lg p-3 space-y-2">
+              <div className="text-xs text-muted-foreground">Span {i + 1}</div>
+              <Input
+                value={span.text}
+                onChange={e => updateSpan(i, 'text', e.target.value)}
+              />
               <div className="flex gap-2">
-                <label className="flex-1 text-xs">
-                  Size
-                  <input type="number" value={span.size} onChange={e => updateSpan(i, 'size', +e.target.value)}
-                    className="block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-1 text-sm" />
-                </label>
-                <label className="flex-1 text-xs">
-                  Weight
-                  <select value={span.weight} onChange={e => updateSpan(i, 'weight', +e.target.value)}
-                    className="block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-1 text-sm">
-                    <option value={400}>400</option>
-                    <option value={700}>700</option>
-                  </select>
-                </label>
+                <div className="flex-1 space-y-1">
+                  <Label className="text-xs">Size</Label>
+                  <Input
+                    type="number"
+                    value={span.size}
+                    onChange={e => updateSpan(i, 'size', +e.target.value)}
+                    className="font-mono"
+                  />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <Label className="text-xs">Weight</Label>
+                  <Select
+                    value={span.weight}
+                    onValueChange={(v) => { if (v != null) updateSpan(i, 'weight', +v) }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={400}>400</SelectItem>
+                      <SelectItem value={700}>700</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           ))}
-          <label className="block">
-            <span className="text-sm font-medium">Max Width: {maxWidth}px</span>
-            <input type="range" min={100} max={800} value={maxWidth} onChange={e => setMaxWidth(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Line Height: {lineHeight}</span>
-            <input type="range" min={1} max={3} step={0.1} value={lineHeight} onChange={e => setLineHeight(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={showBaselines} onChange={e => setShowBaselines(e.target.checked)} />
+
+          <div className="space-y-2">
+            <Label>Max Width: {maxWidth}px</Label>
+            <Slider
+              value={[maxWidth]}
+              onValueChange={(v) => setMaxWidth(typeof v === 'number' ? v : v[0])}
+              min={100}
+              max={800}
+              step={1}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Line Height: {lineHeight}</Label>
+            <Slider
+              value={[lineHeight]}
+              onValueChange={(v) => setLineHeight(typeof v === 'number' ? v : v[0])}
+              min={1}
+              max={3}
+              step={0.1}
+            />
+          </div>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showBaselines}
+              onChange={e => setShowBaselines(e.target.checked)}
+              className="accent-primary"
+            />
             <span className="text-sm">Show baselines</span>
           </label>
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={showBoundingBoxes} onChange={e => setShowBoundingBoxes(e.target.checked)} />
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showBoundingBoxes}
+              onChange={e => setShowBoundingBoxes(e.target.checked)}
+              className="accent-primary"
+            />
             <span className="text-sm">Show bounding boxes</span>
           </label>
         </>
@@ -83,7 +130,7 @@ export default function SVGTypographyPage() {
       preview={
         result && (
           <div className="space-y-4">
-            <svg width={maxWidth + 20} height={result.height + 20} className="border border-zinc-200 dark:border-zinc-800 rounded">
+            <svg width={maxWidth + 20} height={result.height + 20} className="border border-border rounded">
               <g transform="translate(10, 10)">
                 {/* Container boundary */}
                 <rect x={0} y={0} width={maxWidth} height={result.height} fill="none" stroke="#e4e4e7" strokeDasharray="4" />
@@ -112,7 +159,7 @@ export default function SVGTypographyPage() {
                 ))}
               </g>
             </svg>
-            <div className="text-xs font-mono text-zinc-500">
+            <div className="font-mono text-xs text-muted-foreground">
               {result.lineCount} lines, {result.width.toFixed(1)}px x {result.height.toFixed(1)}px
             </div>
           </div>

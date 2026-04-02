@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { DemoShell } from '@/components/demo-shell'
+import { Slider } from '@/components/ui/slider'
+import { Label } from '@/components/ui/label'
 import { layoutOGImage } from './actions'
 
 type OGResult = Awaited<ReturnType<typeof layoutOGImage>>
@@ -32,42 +34,69 @@ export default function OGImagePage() {
       description="Preview social card layout with fitText auto-scaling. Textric computes exact line breaks server-side."
       controls={
         <>
-          <label className="block">
-            <span className="text-sm font-medium">Title</span>
-            <textarea value={title} onChange={e => setTitle(e.target.value)} rows={2}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Subtitle</span>
-            <textarea value={subtitle} onChange={e => setSubtitle(e.target.value)} rows={2}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm" />
-          </label>
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={autoFit} onChange={e => setAutoFit(e.target.checked)} />
-            <span className="text-sm font-medium">Auto-fit title size</span>
+          <div className="space-y-1.5">
+            <Label htmlFor="og-title">Title</Label>
+            <textarea
+              id="og-title"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              rows={2}
+              className="block w-full bg-input/30 border border-border text-sm rounded-lg font-mono resize-none focus:ring-1 focus:ring-ring px-3 py-2"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="og-subtitle">Subtitle</Label>
+            <textarea
+              id="og-subtitle"
+              value={subtitle}
+              onChange={e => setSubtitle(e.target.value)}
+              rows={2}
+              className="block w-full bg-input/30 border border-border text-sm rounded-lg font-mono resize-none focus:ring-1 focus:ring-ring px-3 py-2"
+            />
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={autoFit}
+              onChange={e => setAutoFit(e.target.checked)}
+              className="accent-primary"
+            />
+            <span className="text-sm">Auto-fit title size</span>
           </label>
           {!autoFit && (
-            <label className="block">
-              <span className="text-sm font-medium">Title Size: {titleSize}px</span>
-              <input type="range" min={20} max={80} value={titleSize} onChange={e => setTitleSize(+e.target.value)}
-                className="mt-1 block w-full" />
-            </label>
-          )}
-          {autoFit && result && (
-            <div className="text-sm text-zinc-500">
-              fitText chose: <span className="font-mono text-blue-600">{result.fitTitle.size}px</span>
+            <div className="space-y-2">
+              <Label>Title Size: {titleSize}px</Label>
+              <Slider
+                value={[titleSize]}
+                onValueChange={(v) => setTitleSize(typeof v === 'number' ? v : v[0])}
+                min={20}
+                max={80}
+              />
             </div>
           )}
-          <label className="block">
-            <span className="text-sm font-medium">Subtitle Size: {subtitleSize}px</span>
-            <input type="range" min={12} max={40} value={subtitleSize} onChange={e => setSubtitleSize(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Padding: {padding}px</span>
-            <input type="range" min={20} max={120} value={padding} onChange={e => setPadding(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
+          {autoFit && result && (
+            <div className="font-mono text-xs text-muted-foreground">
+              fitText chose: <span className="text-emerald-400">{result.fitTitle.size}px</span>
+            </div>
+          )}
+          <div className="space-y-2">
+            <Label>Subtitle Size: {subtitleSize}px</Label>
+            <Slider
+              value={[subtitleSize]}
+              onValueChange={(v) => setSubtitleSize(typeof v === 'number' ? v : v[0])}
+              min={12}
+              max={40}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Padding: {padding}px</Label>
+            <Slider
+              value={[padding]}
+              onValueChange={(v) => setPadding(typeof v === 'number' ? v : v[0])}
+              min={20}
+              max={120}
+            />
+          </div>
         </>
       }
       preview={

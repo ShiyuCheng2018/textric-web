@@ -1,4 +1,8 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 const demos = [
   { href: '/demo/og-image', label: 'OG Image' },
@@ -11,14 +15,25 @@ const demos = [
 ]
 
 export function Nav() {
+  const pathname = usePathname()
+
   return (
-    <nav className="flex items-center gap-6 px-6 h-14 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-      <Link href="/" className="font-semibold text-lg tracking-tight">
-        Textric
+    <nav className="sticky top-0 z-50 flex items-center gap-6 px-6 h-12 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+      <Link href="/" className="font-semibold text-sm tracking-tight font-mono">
+        textric
       </Link>
-      <div className="flex gap-4 overflow-x-auto text-sm">
+      <div className="flex gap-1 overflow-x-auto text-[13px]">
         {demos.map(d => (
-          <Link key={d.href} href={d.href} className="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 whitespace-nowrap">
+          <Link
+            key={d.href}
+            href={d.href}
+            className={cn(
+              'px-2.5 py-1 rounded-md whitespace-nowrap transition-colors',
+              pathname === d.href
+                ? 'bg-accent text-accent-foreground'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+            )}
+          >
             {d.label}
           </Link>
         ))}

@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter, Geist } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import { Nav } from '@/components/nav'
 import './globals.css'
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const inter = Inter({ subsets: ['latin'] })
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
   title: 'Textric Demo — Text Layout for AI',
@@ -15,8 +14,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn("h-full", inter.className, "font-sans", geist.variable)}>
-      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950">
+    <html lang="en" className={cn('dark h-full', geist.variable, geistMono.variable)}>
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans antialiased">
         <Nav />
         <main className="flex-1">{children}</main>
       </body>

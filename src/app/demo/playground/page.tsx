@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { DemoShell } from '@/components/demo-shell'
+import { Slider } from '@/components/ui/slider'
+import { Label } from '@/components/ui/label'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import { measureText } from './actions'
 
 type MeasureResult = Awaited<ReturnType<typeof measureText>>
@@ -27,68 +31,127 @@ export default function PlaygroundPage() {
       description="Input text, adjust parameters, see measurement results in real-time."
       controls={
         <>
-          <label className="block">
-            <span className="text-sm font-medium">Text</span>
+          {/* Text input */}
+          <div className="space-y-2">
+            <Label>Text</Label>
             <textarea
               value={text}
               onChange={e => setText(e.target.value)}
               rows={3}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm"
+              className="block w-full bg-input/30 border border-border px-3 py-2 text-sm rounded-lg font-mono resize-none focus:ring-1 focus:ring-ring focus:outline-none"
             />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Font Size: {size}px</span>
-            <input type="range" min={8} max={72} value={size} onChange={e => setSize(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Weight</span>
-            <select value={weight} onChange={e => setWeight(+e.target.value)}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm">
-              <option value={400}>Regular (400)</option>
-              <option value={700}>Bold (700)</option>
-            </select>
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Max Width: {maxWidth ?? 'none'}</span>
-            <input type="range" min={50} max={800} value={maxWidth ?? 800} onChange={e => setMaxWidth(+e.target.value)}
-              className="mt-1 block w-full" />
-            <button onClick={() => setMaxWidth(maxWidth ? null : 300)} className="text-xs text-blue-500 mt-1">
-              {maxWidth ? 'Disable' : 'Enable'} maxWidth
-            </button>
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Line Height: {lineHeight}</span>
-            <input type="range" min={0.8} max={3} step={0.1} value={lineHeight} onChange={e => setLineHeight(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
+          </div>
+
+          {/* Font Size slider */}
+          <div className="space-y-3">
+            <Label>
+              <span>Font Size</span>
+              <span className="ml-auto font-mono text-xs text-muted-foreground">{size}px</span>
+            </Label>
+            <Slider
+              value={[size]}
+              onValueChange={(v) => setSize(typeof v === 'number' ? v : v[0])}
+              min={8}
+              max={72}
+              step={1}
+            />
+          </div>
+
+          {/* Weight select */}
+          <div className="space-y-2">
+            <Label>Weight</Label>
+            <Select value={weight} onValueChange={(v) => { if (v !== null) setWeight(v) }}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={400}>Regular (400)</SelectItem>
+                <SelectItem value={700}>Bold (700)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Max Width slider */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label>
+                <span>Max Width</span>
+                <span className="ml-auto font-mono text-xs text-muted-foreground">
+                  {maxWidth ?? 'none'}
+                </span>
+              </Label>
+              <Button
+                variant="ghost"
+                size="xs"
+                onClick={() => setMaxWidth(maxWidth ? null : 300)}
+              >
+                {maxWidth ? 'Disable' : 'Enable'}
+              </Button>
+            </div>
+            <Slider
+              value={[maxWidth ?? 800]}
+              onValueChange={(v) => setMaxWidth(typeof v === 'number' ? v : v[0])}
+              min={50}
+              max={800}
+              step={1}
+              disabled={maxWidth === null}
+            />
+          </div>
+
+          {/* Line Height slider */}
+          <div className="space-y-3">
+            <Label>
+              <span>Line Height</span>
+              <span className="ml-auto font-mono text-xs text-muted-foreground">{lineHeight}</span>
+            </Label>
+            <Slider
+              value={[lineHeight]}
+              onValueChange={(v) => setLineHeight(typeof v === 'number' ? v : v[0])}
+              min={0.8}
+              max={3}
+              step={0.1}
+            />
+          </div>
         </>
       }
       preview={
         <div className="space-y-4 w-full max-w-2xl">
           {result && (
             <>
-              <div className="text-sm font-mono bg-zinc-100 dark:bg-zinc-900 rounded p-4 space-y-1">
-                <div>width: <span className="text-blue-600">{result.width.toFixed(2)}px</span></div>
-                <div>height: <span className="text-blue-600">{result.height.toFixed(2)}px</span></div>
+              {/* Metric display */}
+              <div className="font-mono text-xs bg-card rounded-lg border border-border p-4 space-y-1">
+                <div className="text-muted-foreground">
+                  width: <span className="text-emerald-400">{result.width.toFixed(2)}px</span>
+                </div>
+                <div className="text-muted-foreground">
+                  height: <span className="text-emerald-400">{result.height.toFixed(2)}px</span>
+                </div>
                 {result.mode === 'multi' && (
                   <>
-                    <div>lineCount: <span className="text-blue-600">{result.lineCount}</span></div>
-                    <div>truncated: <span className="text-blue-600">{String(result.truncated)}</span></div>
+                    <div className="text-muted-foreground">
+                      lineCount: <span className="text-emerald-400">{result.lineCount}</span>
+                    </div>
+                    <div className="text-muted-foreground">
+                      truncated: <span className="text-emerald-400">{String(result.truncated)}</span>
+                    </div>
                   </>
                 )}
                 {result.mode === 'single' && (
                   <>
-                    <div>ascent: <span className="text-blue-600">{result.ascent.toFixed(2)}px</span></div>
-                    <div>descent: <span className="text-blue-600">{result.descent.toFixed(2)}px</span></div>
+                    <div className="text-muted-foreground">
+                      ascent: <span className="text-emerald-400">{result.ascent.toFixed(2)}px</span>
+                    </div>
+                    <div className="text-muted-foreground">
+                      descent: <span className="text-emerald-400">{result.descent.toFixed(2)}px</span>
+                    </div>
                   </>
                 )}
               </div>
 
               {/* Visual preview */}
-              <div className="relative border border-dashed border-zinc-300 dark:border-zinc-700 inline-block">
+              <div className="relative border border-dashed border-border inline-block">
                 {maxWidth && (
-                  <div className="absolute top-0 right-0 text-xs text-zinc-400 px-1">
+                  <div className="absolute top-0 right-0 text-xs text-muted-foreground px-1">
                     {maxWidth}px
                   </div>
                 )}

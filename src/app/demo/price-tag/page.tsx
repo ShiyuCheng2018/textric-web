@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { DemoShell } from '@/components/demo-shell'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
 import { measurePriceTag } from './actions'
 
 type PriceResult = Awaited<ReturnType<typeof measurePriceTag>>
@@ -29,48 +32,41 @@ export default function PriceTagPage() {
       description="Mixed font sizes with rich text layout. Drag the container width to see real-time reflow."
       controls={
         <>
-          <label className="block">
-            <span className="text-sm font-medium">Currency</span>
-            <input value={currency} onChange={e => setCurrency(e.target.value)}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Price</span>
-            <input value={price} onChange={e => setPrice(e.target.value)}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Decimals</span>
-            <input value={decimals} onChange={e => setDecimals(e.target.value)}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Suffix</span>
-            <input value={suffix} onChange={e => setSuffix(e.target.value)}
-              className="mt-1 block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Main Size: {mainSize}px</span>
-            <input type="range" min={24} max={96} value={mainSize} onChange={e => setMainSize(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Small Size: {smallSize}px</span>
-            <input type="range" min={10} max={48} value={smallSize} onChange={e => setSmallSize(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-medium">Container: {containerWidth}px</span>
-            <input type="range" min={100} max={800} value={containerWidth} onChange={e => setContainerWidth(+e.target.value)}
-              className="mt-1 block w-full" />
-          </label>
+          <div className="space-y-2">
+            <Label htmlFor="currency">Currency</Label>
+            <Input id="currency" value={currency} onChange={e => setCurrency(e.target.value)} className="font-mono" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="price">Price</Label>
+            <Input id="price" value={price} onChange={e => setPrice(e.target.value)} className="font-mono" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="decimals">Decimals</Label>
+            <Input id="decimals" value={decimals} onChange={e => setDecimals(e.target.value)} className="font-mono" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="suffix">Suffix</Label>
+            <Input id="suffix" value={suffix} onChange={e => setSuffix(e.target.value)} className="font-mono" />
+          </div>
+          <div className="space-y-2">
+            <Label>Main Size: {mainSize}px</Label>
+            <Slider value={[mainSize]} onValueChange={(v) => setMainSize(typeof v === 'number' ? v : v[0])} min={24} max={96} />
+          </div>
+          <div className="space-y-2">
+            <Label>Small Size: {smallSize}px</Label>
+            <Slider value={[smallSize]} onValueChange={(v) => setSmallSize(typeof v === 'number' ? v : v[0])} min={10} max={48} />
+          </div>
+          <div className="space-y-2">
+            <Label>Container: {containerWidth}px</Label>
+            <Slider value={[containerWidth]} onValueChange={(v) => setContainerWidth(typeof v === 'number' ? v : v[0])} min={100} max={800} />
+          </div>
         </>
       }
       preview={
         <div className="space-y-4">
           {result && (
             <>
-              <div className="border border-dashed border-zinc-300 dark:border-zinc-700 relative" style={{ width: containerWidth }}>
+              <div className="border border-dashed border-border relative" style={{ width: containerWidth }}>
                 <svg width={containerWidth} height={result.height + 10} className="block">
                   {result.lines.map((line, li) =>
                     line.fragments.map((frag, fi) => (
@@ -89,7 +85,7 @@ export default function PriceTagPage() {
                   )}
                 </svg>
               </div>
-              <div className="text-xs font-mono text-zinc-500">
+              <div className="font-mono text-xs text-muted-foreground">
                 {result.width.toFixed(1)}px x {result.height.toFixed(1)}px
               </div>
             </>

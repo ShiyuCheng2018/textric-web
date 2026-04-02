@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { DemoShell } from '@/components/demo-shell'
+import { Input } from '@/components/ui/input'
+import { Slider } from '@/components/ui/slider'
+import { Label } from '@/components/ui/label'
 import { preflightEmail } from './actions'
 
 type PreflightResult = Awaited<ReturnType<typeof preflightEmail>>
@@ -35,15 +38,24 @@ export default function EmailPreflightPage() {
       controls={
         <>
           {items.map((item, i) => (
-            <div key={i} className="border border-zinc-200 dark:border-zinc-800 rounded p-2 space-y-2">
-              <div className="text-xs font-medium text-zinc-500">{item.label}</div>
-              <input value={item.text} onChange={e => updateItem(i, 'text', e.target.value)}
-                className="block w-full rounded border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-2 py-1 text-sm" />
-              <label className="text-xs">
-                Container: {item.maxWidth}px
-                <input type="range" min={100} max={600} value={item.maxWidth}
-                  onChange={e => updateItem(i, 'maxWidth', +e.target.value)} className="block w-full" />
-              </label>
+            <div key={i} className="bg-card border border-border rounded-lg p-3 space-y-3">
+              <div className="text-xs font-medium text-muted-foreground">{item.label}</div>
+              <Input
+                value={item.text}
+                onChange={e => updateItem(i, 'text', e.target.value)}
+                className="text-sm"
+              />
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">
+                  Container: {item.maxWidth}px
+                </Label>
+                <Slider
+                  value={[item.maxWidth]}
+                  onValueChange={(v) => updateItem(i, 'maxWidth', typeof v === 'number' ? v : v[0])}
+                  min={100}
+                  max={600}
+                />
+              </div>
             </div>
           ))}
         </>
@@ -54,23 +66,23 @@ export default function EmailPreflightPage() {
             <div key={i} className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className={`inline-block w-3 h-3 rounded-full ${r.fits ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                <span className="text-sm font-medium">{r.label}</span>
-                <span className="text-xs text-zinc-400 ml-auto">
+                <span className={`text-sm font-medium ${r.fits ? 'text-emerald-400' : 'text-red-400'}`}>{r.label}</span>
+                <span className="text-xs text-muted-foreground ml-auto">
                   {r.measuredWidth.toFixed(0)}px / {r.maxWidth}px
                 </span>
               </div>
-              <div className="relative border rounded overflow-hidden" style={{ width: r.maxWidth }}>
-                <div className="p-3 bg-white dark:bg-zinc-900"
+              <div className="relative bg-card border border-border rounded-lg overflow-hidden" style={{ width: r.maxWidth }}>
+                <div className="p-3"
                   style={{ fontSize: items[i]!.size, fontWeight: items[i]!.weight, fontFamily: 'Inter' }}>
                   {r.lines.join(' ')}
-                  {r.truncated && <span className="text-red-400">...</span>}
+                  {r.truncated && <span className="text-xs text-red-400">...</span>}
                 </div>
                 {!r.fits && (
-                  <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-red-100 dark:from-red-950 to-transparent" />
+                  <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-destructive/20 to-transparent" />
                 )}
               </div>
               {r.truncated && (
-                <div className="text-xs text-red-500">
+                <div className="text-xs text-red-400">
                   Truncated: {r.lineCount}/{r.totalLineCount} lines shown
                 </div>
               )}

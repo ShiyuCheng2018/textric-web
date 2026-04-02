@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 const demos = [
   {
@@ -40,44 +43,45 @@ const demos = [
   {
     href: '/demo/benchmark',
     title: 'Performance Benchmark',
-    description: 'Run 1K–20K measurements. See real throughput.',
+    description: 'Run 1K-20K measurements. See real throughput.',
     tag: 'Interactive',
   },
 ]
 
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold tracking-tight">Textric</h1>
-        <p className="mt-3 text-lg text-zinc-500">
+    <div className="max-w-4xl mx-auto px-6 py-20">
+      <div className="text-center mb-20">
+        <h1 className="text-5xl font-bold tracking-tighter font-mono">textric</h1>
+        <p className="mt-4 text-lg text-muted-foreground max-w-md mx-auto">
           Text layout for AI. Line wrapping, rich text, and precise metrics — pure JS, no browser.
         </p>
-        <div className="mt-6 flex justify-center gap-4 text-sm">
+        <div className="mt-8 flex justify-center gap-3">
           <a href="https://github.com/ShiyuCheng2018/textric" target="_blank"
-            className="px-4 py-2 rounded bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-medium hover:opacity-90">
+            className="inline-flex items-center justify-center h-8 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/80 transition-colors">
             GitHub
           </a>
           <a href="https://www.npmjs.com/package/textric" target="_blank"
-            className="px-4 py-2 rounded border border-zinc-300 dark:border-zinc-700 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-900">
-            npm install textric
+            className="inline-flex items-center justify-center h-8 px-4 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors">
+            <code className="text-xs font-mono">npm i textric</code>
           </a>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {demos.map(demo => (
-          <Link key={demo.href} href={demo.href}
-            className="block p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors">
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`text-xs px-2 py-0.5 rounded-full ${
-                demo.tag === 'Showcase'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                  : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300'
-              }`}>{demo.tag}</span>
-            </div>
-            <h2 className="font-semibold">{demo.title}</h2>
-            <p className="text-sm text-zinc-500 mt-1">{demo.description}</p>
+          <Link key={demo.href} href={demo.href} className="group">
+            <Card className="h-full transition-colors border-border/50 hover:border-border group-hover:bg-card">
+              <CardHeader className="p-4">
+                <div className="mb-2">
+                  <Badge variant={demo.tag === 'Showcase' ? 'default' : 'secondary'} className="text-[10px] px-1.5 py-0">
+                    {demo.tag}
+                  </Badge>
+                </div>
+                <CardTitle className="text-sm font-medium">{demo.title}</CardTitle>
+                <CardDescription className="text-xs">{demo.description}</CardDescription>
+              </CardHeader>
+            </Card>
           </Link>
         ))}
       </div>
