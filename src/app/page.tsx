@@ -17,9 +17,9 @@ const demos = [
     tag: 'Showcase',
   },
   {
-    href: '/demo/svg-typography',
-    title: 'SVG Typography',
-    description: 'Rich text to SVG with baseline alignment visualization.',
+    href: '/demo/rich-text',
+    title: 'Rich Text',
+    description: 'Mixed font sizes aligned on a shared baseline. Visualize the layout math.',
     tag: 'Showcase',
   },
   {
