@@ -17,12 +17,6 @@ const demos = [
     tag: 'Showcase',
   },
   {
-    href: '/demo/price-tag',
-    title: 'Price Tag Builder',
-    description: 'Mixed font sizes with rich text. Drag to reflow.',
-    tag: 'Showcase',
-  },
-  {
     href: '/demo/email-preflight',
     title: 'Email Template Preflight',
     description: 'Check if text fits in fixed-width email containers.',
