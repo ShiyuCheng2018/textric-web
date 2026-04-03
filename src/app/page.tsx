@@ -5,6 +5,12 @@ import { cn } from '@/lib/utils'
 
 const demos = [
   {
+    href: '/demo/poster-editor',
+    title: 'Poster Editor',
+    description: 'Drag to move, resize to reflow. Textric computes layout in real-time.',
+    tag: 'Showcase',
+  },
+  {
     href: '/demo/chat-bubble',
     title: 'Chat Bubble',
     description: 'Precisely sized chat bubbles rendered on Canvas. Export as PNG.',
