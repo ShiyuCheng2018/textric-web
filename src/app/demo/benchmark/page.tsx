@@ -7,33 +7,49 @@ import { Slider } from '@/components/ui/slider'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 
+const COUNTS = [100, 1000, 5000, 10000, 20000]
+
 export default function BenchmarkPage() {
   const m = useTextric()
-  const [text, setText] = useState('The quick brown fox jumps over the lazy dog.')
+  const [text, setText] = useState('When AI generates visual content — UI designs, slides, PDFs, social images — it needs to know exactly how text will look.')
   const [size, setSize] = useState(16)
   const [maxWidth, setMaxWidth] = useState(300)
   const [running, setRunning] = useState(false)
   const [results, setResults] = useState<Array<{ count: number; durationMs: number; opsPerSec: number }> | null>(null)
+  const [progress, setProgress] = useState(0)
 
   const run = async () => {
     if (!m) return
     setRunning(true)
-    // Use setTimeout(0) to let UI update to "Running..." state
-    await new Promise(r => setTimeout(r, 0))
-    const counts = [100, 1000, 5000, 10000, 20000]
+    setResults(null)
+    setProgress(0)
+
     const newResults: Array<{ count: number; durationMs: number; opsPerSec: number }> = []
-    for (const count of counts) {
+
+    // Warmup — let JIT optimize before measuring
+    for (let i = 0; i < 200; i++) {
+      m.measure(text, { font: 'Noto Sans SC', size, maxWidth })
+    }
+
+    for (let ci = 0; ci < COUNTS.length; ci++) {
+      const count = COUNTS[ci]
+      // Yield to UI between each count
+      await new Promise(r => setTimeout(r, 0))
+      setProgress(ci + 1)
+
       const start = performance.now()
       for (let i = 0; i < count; i++) {
         m.measure(text, { font: 'Noto Sans SC', size, maxWidth })
       }
       const durationMs = performance.now() - start
+
       newResults.push({
         count,
         durationMs: Math.round(durationMs * 100) / 100,
         opsPerSec: Math.round(count / (durationMs / 1000)),
       })
     }
+
     setResults(newResults)
     setRunning(false)
   }
@@ -42,8 +58,8 @@ export default function BenchmarkPage() {
 
   return (
     <DemoShell
-      title="Performance Benchmark"
-      description="Measure text layout performance at scale. All computation runs client-side via Textric."
+      title="Benchmark"
+      description="How fast is textric? Run 100–20K measurements and see real throughput."
       controls={
         <>
           <div className="space-y-2">
@@ -70,11 +86,11 @@ export default function BenchmarkPage() {
               value={[maxWidth]}
               onValueChange={(v) => setMaxWidth(typeof v === 'number' ? v : v[0])}
               min={50}
-              max={800}
+              max={500}
             />
           </div>
-          <Button onClick={run} disabled={running} className="w-full">
-            {running ? 'Running...' : 'Run Benchmark'}
+          <Button onClick={run} disabled={running || !m} className="w-full">
+            {running ? `Running... (${progress}/${COUNTS.length})` : 'Run Benchmark'}
           </Button>
         </>
       }
@@ -86,7 +102,7 @@ export default function BenchmarkPage() {
                 {results.map(r => (
                   <div key={r.count} className="space-y-1">
                     <div className="flex justify-between text-sm">
-                      <span className="font-medium">{r.count.toLocaleString()} items</span>
+                      <span className="font-medium">{r.count.toLocaleString()} calls</span>
                       <span className="font-mono text-muted-foreground">{r.durationMs}ms</span>
                     </div>
                     <div className="h-8 bg-card rounded overflow-hidden relative">
@@ -102,12 +118,12 @@ export default function BenchmarkPage() {
                 ))}
               </div>
               <div className="text-xs text-muted-foreground">
-                All measurements run client-side. Each operation = measure() with multi-line wrapping.
+                Includes 200-call JIT warmup. Each call = measure() with multi-line wrapping. Runs in-browser, not on server.
               </div>
             </>
           ) : (
             <div className="text-center text-muted-foreground py-12">
-              Click &quot;Run Benchmark&quot; to start
+              {m ? 'Click "Run Benchmark" to start' : 'Loading textric...'}
             </div>
           )}
         </div>
