@@ -11,7 +11,7 @@ const COUNTS = [100, 1000, 5000, 10000, 20000]
 
 export default function BenchmarkPage() {
   const m = useTextric()
-  const [text, setText] = useState('When AI generates visual content — UI designs, slides, PDFs, social images — it needs to know exactly how text will look.')
+  const [text, setText] = useState('AI generates UI directly, computes layout on server, needs text layout.')
   const [size, setSize] = useState(16)
   const [maxWidth, setMaxWidth] = useState(300)
   const [running, setRunning] = useState(false)
