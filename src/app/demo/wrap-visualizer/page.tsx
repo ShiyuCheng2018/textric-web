@@ -58,7 +58,7 @@ export default function WrapVisualizerPage() {
               value={[maxWidth]}
               onValueChange={(v) => setMaxWidth(typeof v === 'number' ? v : v[0])}
               min={50}
-              max={800}
+              max={550}
               step={1}
             />
           </div>
