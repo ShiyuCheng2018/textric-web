@@ -17,12 +17,6 @@ const demos = [
     tag: 'Showcase',
   },
   {
-    href: '/demo/email-preflight',
-    title: 'Email Template Preflight',
-    description: 'Check if text fits in fixed-width email containers.',
-    tag: 'Showcase',
-  },
-  {
     href: '/demo/svg-typography',
     title: 'SVG Typography',
     description: 'Rich text to SVG with baseline alignment visualization.',

@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 const demos = [
   { href: '/demo/poster-editor', label: 'Poster Editor' },
   { href: '/demo/chat-bubble', label: 'Chat Bubble' },
-  { href: '/demo/email-preflight', label: 'Email Preflight' },
   { href: '/demo/svg-typography', label: 'SVG Typography' },
   { href: '/demo/playground', label: 'Playground' },
   { href: '/demo/wrap-visualizer', label: 'Wrap Visualizer' },
