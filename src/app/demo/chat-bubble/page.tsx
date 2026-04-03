@@ -57,6 +57,7 @@ export default function ChatBubblePage() {
   const [canvasWidth] = useState(390)
   const maxAllowedBubble = 300
   const [maxBubbleWidth, setMaxBubbleWidth] = useState(260)
+  const [maxLines, setMaxLines] = useState(0) // 0 = no limit
   const [showMetrics, setShowMetrics] = useState(false)
   const metricsOpacity = useRef(0)
   const animFrameRef = useRef<number>(0)
@@ -76,25 +77,30 @@ export default function ChatBubblePage() {
       const measured = m.measure(msg.text, {
         font: 'Noto Sans SC', size: fontSize, weight: 400,
         maxWidth: maxTextWidth, lineHeight: 1.4,
+        ...(maxLines > 0 ? { maxLines } : {}),
       })
       const bubbleW = Math.min(measured.width, maxTextWidth) + BUBBLE_PX * 2
       const bubbleH = measured.height + BUBBLE_PY * 2
       const prevMsg = i > 0 ? messages[i - 1] : null
       const sameGroup = prevMsg && prevMsg.isMe === msg.isMe
+      const moreH = measured.truncated ? 10 : 0
       return {
         ...msg,
         lines: measured.lines,
         lineWidths: measured.lineWidths,
         bubbleW,
-        bubbleH,
+        bubbleH: bubbleH + moreH,
         textW: measured.width,
         textH: measured.height,
         sameGroup,
         lineCount: measured.lineCount,
+        totalLineCount: measured.totalLineCount,
+        truncated: measured.truncated,
         maxTextWidth,
+        moreH,
       }
     })
-  }, [m, messages, fontSize, maxBubbleWidth])
+  }, [m, messages, fontSize, maxBubbleWidth, maxLines])
 
   const totalHeight = useMemo(() => {
     if (!layout) return 500
@@ -188,6 +194,17 @@ export default function ChatBubblePage() {
         ctx.fillText(line, textX, textY + li * fontSize * 1.4)
       })
 
+      // Truncation — "more" section at bottom of bubble
+      if (bubble.truncated) {
+        const sepY = y + bubble.bubbleH - bubble.moreH
+        // "more" text
+        ctx.fillStyle = isMe ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.4)'
+        ctx.font = `11px "Noto Sans SC"`
+        ctx.textAlign = 'right'
+        ctx.textBaseline = 'middle'
+        ctx.fillText('more', bx + bubble.bubbleW - BUBBLE_PX, sepY + bubble.moreH / 2 - 4)
+      }
+
       // ── Metrics overlay ──
       const mAlpha = metricsOpacity.current
       if (mAlpha > 0.01) {
@@ -253,7 +270,8 @@ export default function ChatBubblePage() {
         ctx.font = `${METRIC_FONT_SIZE}px "Noto Sans SC"`
         ctx.textAlign = isMe ? 'right' : 'left'
         ctx.textBaseline = 'top'
-        const dimLabel = `${bubble.bubbleW.toFixed(0)} × ${bubble.bubbleH.toFixed(0)} px`
+        const truncInfo = bubble.truncated ? `  [${bubble.lineCount}/${bubble.totalLineCount} lines]` : ''
+        const dimLabel = `${bubble.bubbleW.toFixed(0)} × ${bubble.bubbleH.toFixed(0)} px${truncInfo}`
         const dimX = isMe ? bx + bubble.bubbleW : bx
         ctx.fillText(dimLabel, dimX, y + bubble.bubbleH + 2)
       }
@@ -330,6 +348,10 @@ export default function ChatBubblePage() {
           <div className="space-y-2">
             <Label>Max Bubble Width: {maxBubbleWidth}px</Label>
             <Slider value={[maxBubbleWidth]} onValueChange={(v) => setMaxBubbleWidth(typeof v === 'number' ? v : v[0])} min={120} max={maxAllowedBubble} />
+          </div>
+          <div className="space-y-2">
+            <Label>Max Lines: {maxLines === 0 ? 'no limit' : maxLines}</Label>
+            <Slider value={[maxLines]} onValueChange={(v) => setMaxLines(typeof v === 'number' ? v : v[0])} min={0} max={6} />
           </div>
 
           <div className="flex items-center justify-between border-t border-border pt-3">

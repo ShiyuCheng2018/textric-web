@@ -336,6 +336,17 @@ export default function PosterEditorPage() {
                 </div>
               </div>
 
+              <Button variant="secondary" size="sm" className="w-full"
+                onClick={() => {
+                  if (!m || !selectedId) return
+                  const bm = measured()?.find(b => b.id === selectedId)
+                  if (!bm) return
+                  // Shrink width to actual text width at current fitText size
+                  updateSelected('width', Math.ceil(bm.textW))
+                }}>
+                Shrink Wrap
+              </Button>
+
               <div className="space-y-2">
                 <Label>Weight</Label>
                 <div className="flex gap-2">
