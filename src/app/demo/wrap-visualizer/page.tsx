@@ -62,16 +62,6 @@ export default function WrapVisualizerPage() {
               step={1}
             />
           </div>
-          <div className="space-y-2">
-            <Label>Line Height: {lineHeight}</Label>
-            <Slider
-              value={[lineHeight]}
-              onValueChange={(v) => setLineHeight(typeof v === 'number' ? v : v[0])}
-              min={1}
-              max={3}
-              step={0.1}
-            />
-          </div>
         </>
       }
       preview={
