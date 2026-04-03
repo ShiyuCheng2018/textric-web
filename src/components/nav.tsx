@@ -8,7 +8,6 @@ const demos = [
   { href: '/demo/poster-editor', label: 'Poster Editor' },
   { href: '/demo/chat-bubble', label: 'Chat Bubble' },
   { href: '/demo/rich-text', label: 'Rich Text' },
-  { href: '/demo/playground', label: 'Playground' },
   { href: '/demo/wrap-visualizer', label: 'Wrap Visualizer' },
   { href: '/demo/benchmark', label: 'Benchmark' },
 ]

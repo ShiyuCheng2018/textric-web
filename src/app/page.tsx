@@ -23,12 +23,6 @@ const demos = [
     tag: 'Showcase',
   },
   {
-    href: '/demo/playground',
-    title: 'Measurement Playground',
-    description: 'Input text, tweak parameters, see results live.',
-    tag: 'Interactive',
-  },
-  {
     href: '/demo/wrap-visualizer',
     title: 'Wrap Visualizer',
     description: 'Visualize line-break decisions and per-line widths.',

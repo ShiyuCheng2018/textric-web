@@ -15,35 +15,16 @@ interface Span {
   weight: number
 }
 
-const presets: Record<string, Span[]> = {
-  'Dashboard Header': [
-    { text: 'Dashboard ', size: 32, weight: 700 },
-    { text: 'v2.1 ', size: 12, weight: 400 },
-    { text: '— Production metrics for your AI pipeline with real-time monitoring and alerts.', size: 16, weight: 400 },
-  ],
-  'Price Tag': [
-    { text: '$', size: 16, weight: 400 },
-    { text: '49', size: 48, weight: 700 },
-    { text: '.99', size: 16, weight: 400 },
-    { text: '/mo ', size: 14, weight: 400 },
-    { text: 'billed annually', size: 12, weight: 400 },
-  ],
-  'Notification': [
-    { text: 'Your plan ', size: 15, weight: 400 },
-    { text: 'Pro', size: 15, weight: 700 },
-    { text: ' renews on ', size: 15, weight: 400 },
-    { text: 'April 30', size: 15, weight: 700 },
-    { text: '. Revenue increased ', size: 15, weight: 400 },
-    { text: '23%', size: 20, weight: 700 },
-    { text: ' compared to last week.', size: 15, weight: 400 },
-  ],
-  'Hero Title': [
-    { text: 'Text Layout ', size: 40, weight: 700 },
-    { text: 'for ', size: 28, weight: 400 },
-    { text: 'AI', size: 40, weight: 700 },
-    { text: '. Pure JS, no browser. Runs on Node, Bun, Deno, Cloudflare Workers, AWS Lambda.', size: 16, weight: 400 },
-  ],
-}
+const defaultSpans: Span[] = [
+  { text: 'Weekly Revenue Report ', size: 28, weight: 700 },
+  { text: '+23% ', size: 36, weight: 700 },
+  { text: 'vs last week. ', size: 14, weight: 400 },
+  { text: 'Driven by the new subscription tier launched Tuesday. ', size: 14, weight: 400 },
+  { text: '$12,450 ', size: 24, weight: 700 },
+  { text: 'total revenue across ', size: 13, weight: 400 },
+  { text: '1,204 ', size: 18, weight: 700 },
+  { text: 'transactions.', size: 13, weight: 400 },
+]
 
 const CANVAS_PADDING = 20
 
@@ -51,8 +32,7 @@ export default function RichTextPage() {
   const m = useTextric()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [fontLoaded, setFontLoaded] = useState(false)
-  const [activePreset, setActivePreset] = useState('Dashboard Header')
-  const [spans, setSpans] = useState<Span[]>(presets['Dashboard Header'])
+  const [spans, setSpans] = useState<Span[]>(defaultSpans)
   const [maxWidth, setMaxWidth] = useState(460)
   const [lineHeight, setLineHeight] = useState(1.5)
   const [showBaselines, setShowBaselines] = useState(true)
@@ -180,18 +160,6 @@ export default function RichTextPage() {
       description="Mixed font sizes sharing a baseline. Textric aligns fragments precisely — visualize the layout math."
       controls={
         <>
-          <div className="space-y-2">
-            <Label className="text-xs text-muted-foreground uppercase tracking-wider">Presets</Label>
-            <div className="flex flex-wrap gap-1.5">
-              {Object.keys(presets).map(name => (
-                <button key={name} onClick={() => { setActivePreset(name); setSpans(presets[name]) }}
-                  className={`px-2.5 py-1 rounded text-xs transition-colors ${activePreset === name ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent/50'}`}>
-                  {name}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {spans.map((span, i) => (
             <div key={i} className="bg-card border border-border rounded-lg p-3 space-y-2">
               <div className="flex items-center justify-between">
