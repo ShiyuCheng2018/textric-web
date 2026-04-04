@@ -36,7 +36,10 @@
       "Bash(curl -s \"https://api.github.com/repos/regisdantas/wolfenstein-ascii-fps/contents/\")",
       "Bash(python3 -c \"import sys,json; [print\\(f['name']\\) for f in json.load\\(sys.stdin\\)]\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/justMoritz/3d-game-engine/master/src/game-engine.js\")",
-      "Bash(curl -s \"https://api.github.com/repos/regisdantas/wolfenstein-ascii-fps/contents/src\")"
+      "Bash(curl -s \"https://api.github.com/repos/regisdantas/wolfenstein-ascii-fps/contents/src\")",
+      "Bash(gh api:*)",
+      "Bash(grep -E '\\\\.c$|\\\\.h$')",
+      "WebFetch(domain:www.npmjs.com)"
     ]
   }
 }
