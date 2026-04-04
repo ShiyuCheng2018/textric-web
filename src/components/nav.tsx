@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 const demos = [
+  { href: '/demo/ai-streaming', label: 'AI Streaming' },
   { href: '/demo/poster-editor', label: 'Poster Editor' },
   { href: '/demo/chat-bubble', label: 'Chat Bubble' },
   { href: '/demo/rich-text', label: 'Rich Text' },

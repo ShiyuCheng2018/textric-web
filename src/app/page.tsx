@@ -5,6 +5,12 @@ import { cn } from '@/lib/utils'
 
 const demos = [
   {
+    href: '/demo/ai-streaming',
+    title: 'AI Streaming Layout',
+    description: 'AI generates text token-by-token. Textric predicts layout in real-time.',
+    tag: 'Showcase',
+  },
+  {
     href: '/demo/poster-editor',
     title: 'Poster Editor',
     description: 'Drag to move, resize to reflow. Textric computes layout in real-time.',
