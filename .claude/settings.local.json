@@ -11,7 +11,32 @@
       "Bash(node:*)",
       "Bash(pnpm dev:*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
-      "Bash(npx shadcn@latest:*)"
+      "Bash(npx shadcn@latest:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/somnai-dreams/pretext-demos/main/variable-typographic-ascii.html\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/somnai-dreams/pretext-demos/main/pretext.js\")",
+      "WebSearch",
+      "WebFetch(domain:paulbourke.net)",
+      "WebFetch(domain:www.jave.de)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:chenglou.me)",
+      "Bash(/usr/bin/curl -L -o /tmp/NotoSansSC-Variable.ttf \"https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf\")",
+      "Bash(python3 -m fontTools.varLib.instancer /tmp/NotoSansSC-Variable.ttf wght=300 -o /Users/shiyucheng/MyProjects/textric-demo/public/fonts/NotoSansSC-300.ttf)",
+      "Bash(python3 -m fontTools.varLib.instancer /tmp/NotoSansSC-Variable.ttf wght=500 -o /Users/shiyucheng/MyProjects/textric-demo/public/fonts/NotoSansSC-500.ttf)",
+      "Bash(python3 -m fontTools.varLib.instancer /tmp/NotoSansSC-Variable.ttf wght=800 -o /Users/shiyucheng/MyProjects/textric-demo/public/fonts/NotoSansSC-800.ttf)",
+      "Bash(ls:*)",
+      "Bash(open:*)",
+      "Bash(/usr/bin/curl -L -o /tmp/NotoSerif-Variable.ttf \"https://github.com/google/fonts/raw/main/ofl/notoserif/NotoSerif%5Bwdth%2Cwght%5D.ttf\")",
+      "Bash(curl -s \"https://api.github.com/search/repositories?q=ascii+raycaster+language:javascript&sort=stars&per_page=10\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f'{r[\\\\\"stargazers_count\\\\\"]:>5} ★ {r[\\\\\"full_name\\\\\"]:40s} {r[\\\\\"html_url\\\\\"]}'\\) for r in data.get\\('items',[]\\)]\")",
+      "Bash(curl -s \"https://api.github.com/search/repositories?q=console+raycaster+ascii+3d&sort=stars&per_page=10\")",
+      "Bash(curl -s \"https://api.github.com/search/repositories?q=OneLoneCoder+raycaster+OR+CommandLineFPS&sort=stars&per_page=5\")",
+      "Bash(curl -s \"https://api.github.com/search/code?q=CommandLineFPS+shade+language:cpp&per_page=5\" -H \"Accept: application/vnd.github.v3+json\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f'{r[\\\\\"repository\\\\\"][\\\\\"full_name\\\\\"]:40s} {r[\\\\\"html_url\\\\\"]}'\\) for r in data.get\\('items',[]\\)]\")",
+      "Bash(curl -s \"https://api.github.com/repos/regisdantas/wolfenstein-ascii-fps/contents/\")",
+      "Bash(python3 -c \"import sys,json; [print\\(f['name']\\) for f in json.load\\(sys.stdin\\)]\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/justMoritz/3d-game-engine/master/src/game-engine.js\")",
+      "Bash(curl -s \"https://api.github.com/repos/regisdantas/wolfenstein-ascii-fps/contents/src\")"
     ]
   }
 }
