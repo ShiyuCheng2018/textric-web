@@ -54,7 +54,7 @@ export default function ChatBubblePage() {
   const [messages, setMessages] = useState<Message[]>(defaultMessages)
   const [newMsg, setNewMsg] = useState('')
   const [fontSize, setFontSize] = useState(15)
-  const [canvasWidth] = useState(390)
+  const canvasWidth = 390
   const maxAllowedBubble = 300
   const [maxBubbleWidth, setMaxBubbleWidth] = useState(260)
   const [maxLines, setMaxLines] = useState(0) // 0 = no limit
@@ -287,7 +287,7 @@ export default function ChatBubblePage() {
 
       y += bubble.bubbleH + TIME_HEIGHT + (showMetrics ? 12 : 0)
     }
-  }, [layout, fontLoaded, canvasWidth, totalHeight, fontSize, maxBubbleWidth])
+  }, [layout, fontLoaded, canvasWidth, totalHeight, fontSize, maxBubbleWidth, showMetrics])
 
   useEffect(() => {
     const canvas = canvasRef.current

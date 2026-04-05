@@ -124,7 +124,6 @@ const TOKEN_SPEED_DEFAULT = 60
 export default function AIStreamingPage() {
   const m = useTextric()
   const [fontLoaded, setFontLoaded] = useState(false)
-  const [selectedText, setSelectedText] = useState(0)
   const [tokenSpeed, setTokenSpeed] = useState(TOKEN_SPEED_DEFAULT)
 
   // Shared streaming state
@@ -153,7 +152,7 @@ export default function AIStreamingPage() {
   }, [])
 
   const tokens = useCallback(() => {
-    const text = SAMPLE_TEXTS[selectedText].text
+    const text = SAMPLE_TEXTS[0].text
     const result: string[] = []
     let i = 0
     while (i < text.length) {
@@ -171,7 +170,7 @@ export default function AIStreamingPage() {
       }
     }
     return result
-  }, [selectedText])
+  }, [])
 
   // Streaming tick
   useEffect(() => {
@@ -267,8 +266,6 @@ export default function AIStreamingPage() {
     setMeasureTime(0); setTotalMeasureTime(0)
     if (domRef.current) domRef.current.textContent = ''
   }
-  const handleTextChange = (idx: number) => { handleReset(); setSelectedText(idx) }
-
   const allTokens = tokens()
   const progress = allTokens.length > 0 ? tokenIndex / allTokens.length : 0
 

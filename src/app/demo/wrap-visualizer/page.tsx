@@ -9,9 +9,9 @@ import { useTextric } from '@/hooks/use-textric'
 export default function WrapVisualizerPage() {
   const [text, setText] = useState('When AI generates visual content — UI designs, slides, PDFs, social images — it needs to know exactly how text will look: how wide, how many lines, where it wraps. Textric solves this. 它解析字体文件，在纯 JavaScript 中计算像素级精确的文本布局。')
   const [size, setSize] = useState(18)
-  const [weight, setWeight] = useState(400)
+  const weight = 400
   const [maxWidth, setMaxWidth] = useState(350)
-  const [lineHeight, setLineHeight] = useState(1.4)
+  const lineHeight = 1.4
   const m = useTextric()
 
   const result = useMemo(() => {

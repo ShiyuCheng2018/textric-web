@@ -150,7 +150,7 @@ export default function RichTextPage() {
     if (canvas) drawCanvas(canvas)
   }, [drawCanvas])
 
-  const updateSpan = (i: number, field: string, value: string | number) => {
+  const updateSpan = (i: number, field: keyof Span, value: string | number) => {
     setSpans(prev => prev.map((s, j) => j === i ? { ...s, [field]: value } : s))
   }
 

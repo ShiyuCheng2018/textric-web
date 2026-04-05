@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { DemoShell } from '@/components/demo-shell'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -51,7 +51,7 @@ export default function PosterEditorPage() {
   }, [])
 
   // fitText for each block — textric finds optimal font size
-  const measured = useCallback(() => {
+  const measured = useMemo(() => {
     if (!m) return null
     return blocks.map(block => {
       const fit = m.fitText(block.text, {
@@ -73,7 +73,7 @@ export default function PosterEditorPage() {
   }, [m, blocks])
 
   const drawCanvas = useCallback((canvas: HTMLCanvasElement) => {
-    const data = measured()
+    const data = measured
     if (!data || !fontLoaded) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -171,7 +171,7 @@ export default function PosterEditorPage() {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const pos = getCanvasPos(e)
-    const data = measured()
+    const data = measured
     if (!data) return
 
     // Corner handles
@@ -210,7 +210,7 @@ export default function PosterEditorPage() {
       const canvas = canvasRef.current
       if (!canvas) return
       const pos = getCanvasPos(e)
-      const data = measured()
+      const data = measured
       if (!data || !selectedId) return
       const sel = data.find(b => b.id === selectedId)
       if (sel) {
@@ -279,9 +279,9 @@ export default function PosterEditorPage() {
   const handleMouseUp = () => setDragMode(null)
 
   const selectedBlock = blocks.find(b => b.id === selectedId)
-  const selectedMeasured = measured()?.find(b => b.id === selectedId)
+  const selectedMeasured = measured?.find(b => b.id === selectedId)
 
-  const updateSelected = (field: string, value: string | number) => {
+  const updateSelected = (field: keyof TextBlock, value: string | number) => {
     if (!selectedId) return
     setBlocks(prev => prev.map(b => b.id === selectedId ? { ...b, [field]: value } : b))
   }
@@ -339,7 +339,7 @@ export default function PosterEditorPage() {
               <Button variant="secondary" size="sm" className="w-full"
                 onClick={() => {
                   if (!m || !selectedId) return
-                  const bm = measured()?.find(b => b.id === selectedId)
+                  const bm = measured?.find(b => b.id === selectedId)
                   if (!bm) return
                   // Shrink width to actual text width at current fitText size
                   updateSelected('width', Math.ceil(bm.textW))
@@ -379,7 +379,7 @@ export default function PosterEditorPage() {
           <div className="border-t border-border pt-3 space-y-2">
             <Label className="text-xs text-muted-foreground uppercase tracking-wider">Layers</Label>
             {blocks.map(b => {
-              const bm = measured()?.find(x => x.id === b.id)
+              const bm = measured?.find(x => x.id === b.id)
               return (
                 <button key={b.id} onClick={() => setSelectedId(b.id)}
                   className={`w-full text-left px-3 py-1.5 rounded text-sm transition-colors ${b.id === selectedId ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent/50'}`}>

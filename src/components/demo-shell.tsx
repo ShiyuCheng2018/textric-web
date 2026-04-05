@@ -1,5 +1,3 @@
-import { Separator } from '@/components/ui/separator'
-
 interface DemoShellProps {
   title: string
   description: string
