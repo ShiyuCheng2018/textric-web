@@ -37,6 +37,16 @@ export function Nav() {
           </Link>
         ))}
       </div>
+      <div className="ml-auto flex gap-2 shrink-0 text-[13px]">
+        <a href="https://github.com/ShiyuCheng2018/textric/tree/main/docs/api" target="_blank"
+          className="px-2.5 py-1 rounded-md whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors">
+          Docs
+        </a>
+        <a href="https://github.com/ShiyuCheng2018/textric" target="_blank"
+          className="px-2.5 py-1 rounded-md whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors">
+          GitHub
+        </a>
+      </div>
     </nav>
   )
 }

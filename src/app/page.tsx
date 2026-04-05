@@ -51,8 +51,12 @@ export default function Home() {
           Text layout for AI. Line wrapping, rich text, and precise metrics — pure JS, no browser.
         </p>
         <div className="mt-8 flex justify-center gap-3">
-          <a href="https://github.com/ShiyuCheng2018/textric" target="_blank"
+          <a href="https://github.com/ShiyuCheng2018/textric/tree/main/docs/api" target="_blank"
             className="inline-flex items-center justify-center h-8 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/80 transition-colors">
+            Docs & API
+          </a>
+          <a href="https://github.com/ShiyuCheng2018/textric" target="_blank"
+            className="inline-flex items-center justify-center h-8 px-4 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors">
             GitHub
           </a>
           <a href="https://www.npmjs.com/package/textric" target="_blank"
