@@ -8,8 +8,20 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'Textric Demo — Text Layout for AI',
-  description: 'Interactive demos for Textric: line wrapping, rich text, precise metrics — pure JS, no browser.',
+  title: 'Textric — Text Layout for AI',
+  description: 'Line wrapping, rich text, and precise metrics — pure JS, no browser. Interactive demos.',
+  metadataBase: new URL('https://textric-web-production.up.railway.app'),
+  openGraph: {
+    title: 'Textric — Text Layout for AI',
+    description: 'Line wrapping, rich text, and precise metrics — pure JS, no browser. Interactive demos.',
+    siteName: 'Textric',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Textric — Text Layout for AI',
+    description: 'Line wrapping, rich text, and precise metrics — pure JS, no browser.',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
